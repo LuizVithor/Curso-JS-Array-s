@@ -34,7 +34,7 @@ body {
 }
 
 .banner {
-  background-image: url('/Curso-JS-Array-s/imagens/Banner-1.png');
+  background-image: url('./imagens/Banner-1.png');
   background-position: left;
   background-repeat: no-repeat;
   background-size: cover;
