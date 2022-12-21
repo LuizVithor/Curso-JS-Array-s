@@ -9,26 +9,34 @@ function filtrarLivrosCategoria() {
     let elementoBtn = document.getElementById(this.id)
     const categoria = elementoBtn.value
     let livrosFiltrados = livros.filter(livro => livro.categoria == categoria)
+    let livrosFiltradosComDesconto = aplicarDesconto(livrosFiltrados)
     if (categoria == 'disponivel') {
         let disponiveis = livros.filter(livro => livro.quantidade > 0)
-        exibirOsLivrosNaTela(disponiveis)
+        let descontoemdisponiveis = aplicarDesconto(disponiveis)
+        exibirOsLivrosNaTela(descontoemdisponiveis)
+        alterarValorTotal(descontoemdisponiveis , `disponiveis`)
     }
-    else if(elementoBtn != "btnOrdenarPorPreco" && categoria != 'all'){
-    exibirOsLivrosNaTela(livrosFiltrados)
+    else if(elementoBtn != "btnOrdenarPorPreco" && categoria != 'all'){ 
+    exibirOsLivrosNaTela(livrosFiltradosComDesconto)
     classBtnPreco.classList.remove('arrowDown')
     classBtnPreco.classList.remove('arrowUp')
-    } else if (elementoBtn != "btnOrdenarPorPreco"){
+    alterarValorTotal(livrosFiltradosComDesconto , `de ${categoria}`)
+    } 
+    else if (elementoBtn != "btnOrdenarPorPreco"){
 
-        let teste = livros.sort((a , b) => {
+        let listaDeLivrosAll = livros.sort((a , b) => {
             let x = a.titulo.toUpperCase(),
                 y = b.titulo.toUpperCase();
             return x == y ? 0 : x > y ? 1 : -1
         })
         
-        exibirOsLivrosNaTela(teste)
+        let listaDeLivrosAllComDesconto = aplicarDesconto(listaDeLivrosAll)
+
+        exibirOsLivrosNaTela(listaDeLivrosAllComDesconto)
         classBtnPreco.classList.remove('arrowDown')
         classBtnPreco.classList.remove('arrowUp')
-        console.table(teste)
+        console.table(livrosComDesconto)
+        alterarValorTotal(listaDeLivrosAllComDesconto,'')
     }
 }
 
@@ -40,17 +48,26 @@ let ordem = 'decrescente'
 
 function ordenarFiltroPorPreco (teste){
     if (ordem === 'decrescente') {
-        let livrosOrdenados = livros.sort((a , b) => a.preco - b.preco)
+        let valorfinal = aplicarDesconto(livros)
+        let livrosOrdenados = valorfinal.sort((a , b) => a.preco - b.preco)
         exibirOsLivrosNaTela(livrosOrdenados)
-        classBtnPreco.classList.toggle('arrowUp')
-        classBtnPreco.classList.remove('arrowDown')
+        classBtnPreco.classList.toggle('arrowDown')
+        classBtnPreco.classList.remove('arrowUp')
         ordem = 'crescente'
-        
+        alterarValorTotal(livrosOrdenados, '')
     } else if (ordem === 'crescente'){
-        let livrosOrdenados = livros.sort((a , b) => b.preco - a.preco)
+        let valorfinal = aplicarDesconto(livros)
+        let livrosOrdenados = valorfinal.sort((a , b) => b.preco - a.preco)
         exibirOsLivrosNaTela(livrosOrdenados)
         ordem = 'decrescente'
-        classBtnPreco.classList.toggle('arrowDown')
         classBtnPreco.classList.toggle('arrowUp')
+        classBtnPreco.classList.remove('arrowDown')
+        alterarValorTotal(livrosOrdenados, '')
     }
-    }
+}
+
+
+function somaDosPreços (preços) {
+    console.log(preços)
+    preços.reduce((a,b) => a+b)
+}
