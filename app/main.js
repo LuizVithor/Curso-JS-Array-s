@@ -19,7 +19,6 @@ getBuscarLivrosDaAPI()
 async function getBuscarLivrosDaAPI () {
     const res = await fetch(endpointdDaAPI)
     livros = await res.json()
-    console.log(livros)
     let livrosEmOrdem = livros.sort((a , b) => {
         let x = a.titulo.toUpperCase(),
             y = b.titulo.toUpperCase();
